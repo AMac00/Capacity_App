@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Basic Table</title>
+    <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+    <style>
+      body {
+        font-family: Sans-Serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h1>{{ info.title }}</h1>
+      <div id="table"></div>
+    </div>
+    <div>
+      <h2>{{ info.title2 }}</h2>
+      <div id="table2"></div>
+    </div>
+    <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+    <script>
+      new gridjs.Grid({
+        columns: [
+          { id: 'datacenter', name: 'Datacenter'},
+          { id: 'name', name: 'Name'},
+          { id: 'ip', name: 'IP' },
+          { id: 'region', name: 'Region' },    
+          { id: 'fw_small_available', name: 'Small FW Remaining', attributes: (cell) => { if (parseInt(cell)<= 0){ return{'style':'background-color: #F80A0A'}} else if (parseInt(cell)<= 3){return{'style':'background-color: #F8DF0A'}}}},
+          { id: 'fw_medium_available', name: 'Medium FW Remaining', attributes: (cell) => { if (parseInt(cell)<= 0){ return{'style':'background-color: #F80A0A'}} else if (parseInt(cell)<= 3){return{'style':'background-color: #F8DF0A'}}}},
+          { id: 'fw_large_available', name: 'Large FW Remaining', attributes: (cell) => { if (parseInt(cell)<= 0){ return{'style':'background-color: #F80A0A'}} else if (parseInt(cell)<= 3){return{'style':'background-color: #F8DF0A'}}}},
+          { id: 'fw_xllarge_available', name: 'XL Large FW Remaining', attributes: (cell) => { if (parseInt(cell)<= 0){ return{'style':'background-color: #F80A0A'}} else if (parseInt(cell)<= 3){return{'style':'background-color: #F8DF0A'}}}},
+        ],
+        data: [
+          {% for fxo in fxos %}
+            {
+              datacenter: '{{ fxos[fxo].datacenter }}',
+              name: '{{ fxos[fxo].name }}',
+              ip: '{{ fxos[fxo].ip }}',
+              region: '{{ fxos[fxo].region }}',
+              fw_small_available: '{{ fxos[fxo].fw_small_available }}',
+              fw_medium_available: '{{ fxos[fxo].fw_medium_available }}',
+              fw_large_available: '{{ fxos[fxo].fw_large_available }}',
+              fw_xllarge_available: '{{ fxos[fxo].fw_xllarge_available }}',
+            },
+          {% endfor %}
+        ],
+        search: {
+          selector: (cell, rowIndex, cellIndex) => [0, 1, 4].includes(cellIndex) ? cell : null,
+        },
+        sort: true,
+        pagination: true,
+        style: {
+          table: {
+            border: '3px solid #ccc'
+          },
+          th: {
+            'background-color': 'rgba(0, 0, 0, 0.1)',
+            'color': '#000',
+            'border-bottom': '3px solid #ccc',
+            'text-align': 'center'
+          },
+          td: {
+            'text-align': 'center'
+          }
+        }
+      }).render(document.getElementById('table'));
+    </script>
+    <script>
+      new gridjs.Grid({
+        columns: [
+          { id: 'datacenter', name: 'Datacenter'},
+          { id: 'name', name: 'Name'},
+          { id: 'ip', name: 'IP' },
+          { id: 'region', name: 'Region' },
+          { id: 'fw_instances_used', name: 'FW Used'},
+          { id: 'fw_cpu_available', name: 'Remaining CPU'},
+          { id: 'fw_small_used', name: 'Small Deployed'},
+          { id: 'fw_medium_used', name: 'Medium Deployed'},
+          { id: 'fw_large_used', name: 'Large Deployed'},
+          { id: 'fw_xllarge_used', name: 'XL Deployed'},
+        ],
+        data: [
+          {% for fxo in fxos %}
+            {
+              datacenter: '{{ fxos[fxo].datacenter }}',
+              name: '{{ fxos[fxo].name }}',
+              ip: '{{ fxos[fxo].ip }}',
+              region: '{{ fxos[fxo].region }}',
+              fw_instances_used: '{{ fxos[fxo].fw_instances_used }}',
+              fw_cpu_available: '{{ fxos[fxo].fw_cpu_available }}',
+              fw_small_used: '{{ fxos[fxo].fw_small_used }}',
+              fw_medium_used: '{{ fxos[fxo].fw_medium_used }}',
+              fw_large_used: '{{ fxos[fxo].fw_large_used }}',
+              fw_xllarge_used: '{{ fxos[fxo].fw_xllarge_used }}',
+            },
+          {% endfor %}
+        ],
+        search: {
+          selector: (cell, rowIndex, cellIndex) => [0, 1, 4].includes(cellIndex) ? cell : null,
+        },
+        sort: true,
+        pagination: true,
+        style: {
+          table: {
+            border: '3px solid #ccc'
+          },
+          th: {
+            'background-color': 'rgba(0, 0, 0, 0.1)',
+            'color': '#000',
+            'border-bottom': '3px solid #ccc',
+            'text-align': 'center'
+          },
+          td: {
+            'text-align': 'center'
+          }
+        }
+      }).render(document.getElementById('table2'));
+    </script>
+    <b>{{ info.notes }}</b>
+  </body>
+</html>
